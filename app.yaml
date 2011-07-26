@@ -1,0 +1,19 @@
+application: q-paper-generator
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /step1
+  script: python/docs.py
+  login: admin
+
+- url: /step2
+  script: python/docs.py
+  login: admin
+
+- url: /.*
+  script: python/main.py
+  login: admin
+
+

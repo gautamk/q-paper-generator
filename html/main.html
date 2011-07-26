@@ -1,0 +1,102 @@
+<html>
+	<head>
+	<link rel= "stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/humanity/jquery-ui.css" />
+	<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" ></script>
+	<script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+	<script>
+	$(document).ready(function()
+	{
+		$("button").button();
+		
+		$("#AddQuestion").dialog(
+		{
+			autoOpen:false,
+			width:500,
+			show:'slide',
+			hide:'slide',
+		});
+	});
+	</script>
+	<style>
+	body
+	{
+		background-color:#cb842e;
+		
+	}
+	header
+	{
+	text-align:center;	
+	color:white;
+	}
+	#Qlist *
+	{
+		color:white;
+		font-size:20px;
+		font-family:"sans-serif";
+		border:2px ridge white;
+		text-align:center;
+		margin:10px;
+		padding:10px;
+	}
+	</style>
+	</head>
+	<body>
+		<header>
+			<h1>GAE Q Paper Generator</h1>
+			<button><a href="{{ LogoutUrl }}" >Logout</a></button>
+			<button><a href="javascript:$('#AddQuestion').dialog('open')">Add Question</a></button>
+			<button><a href="#">Generate Q Paper</a></button>
+		</header>
+	
+		<form id="AddQuestion" method="post" action="AddQuestion" title = "Add Question">
+			<table>
+			<tr><th><label for="dept_name">Department Name : </label></th><td><input type="text" id="dept_name" name="dept_name" / ></td></tr>
+			<tr>
+			<th><label for="subject_name">Subject : </label></th><td><input type="text" id="subject_name" name = "subject_name" /></td>
+			</tr>
+			<tr><th>
+			
+			<select name="question_type">
+			<option value="long question">Long Question</option>
+			<option value="short question">Short Question</option>
+			</select>
+			
+			</th></tr>
+			<tr>
+			<th><label for="question">Question : </label></th><td><textarea rows = "7"  name="question" id="question"></textarea></td>
+			</tr>
+			<tr>
+			<th><label for="answer">Answer : </label></th><td><textarea rows = "7"  name="answer" id="answer"></textarea></td>
+			</tr>
+			<tr><td></td><td><button type="submit">Add Question</button></td></tr>
+			</table>
+		</form>
+		{% if QListLength %}
+			<center>
+			<table id="Qlist" >
+			<tr>
+			<th>Department</th>
+			<th>Subject</th>
+			<th>Author</th>
+			<th>Q type</th>
+			<th>Question</th>
+			<th>Answer</th>
+			</tr>
+			{% for Q in QList %}
+				<tr>
+				<td>{{ Q.dept_name }}</td>
+				<td>{{ Q.subject_name }}</td>
+				<td>{{ Q.author }}</td>
+				<td>{{ Q.question_type }}</td>
+				<td>{{ Q.question }}</td>
+				<td>{{ Q.answer }}</td>	
+				</tr>
+			{% endfor %}
+			</table>
+			</center>
+		{% else %}
+			No Questions in Database
+		{% endif %}
+	</body>
+
+</html>
