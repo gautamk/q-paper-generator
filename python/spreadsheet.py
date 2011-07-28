@@ -26,6 +26,7 @@ import atom.service
 import gdata.spreadsheet
 import atom
 import os
+import string
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext import db
@@ -77,7 +78,7 @@ class GetSpreadSheetList(webapp.RequestHandler):
 
 class GetWorksheetList(webapp.RequestHandler):
     def get (self):
-        import string
+        
         feed = gd_client.GetSpreadsheetsFeed()
         input = self.request.get('spreadsheetid')
         id_parts = feed.entry[string.atoi(input)].id.text.split('/')
@@ -97,8 +98,39 @@ class GetWorksheetList(webapp.RequestHandler):
         """)
 
 class PrintWorkSheet(webapp.RequestHandler):
+    
+    def _PrintFeed(self, feed):
+        for i, entry in enumerate(feed.entry):
+          if isinstance(feed, gdata.spreadsheet.SpreadsheetsCellsFeed):
+            self.response.out.write( '%s %s<br>' % (entry.title.text, entry.content.text) )
+          elif isinstance(feed, gdata.spreadsheet.SpreadsheetsListFeed):
+            print '%s %s %s' % (i, entry.title.text, entry.content.text)
+            # Print this row's value for each column (the custom dictionary is
+            # built using the gsx: elements in the entry.)
+            self.response.out.write( 'Contents:' )
+            for key in entry.custom:  
+              self.response.out.write( '  %s: %s' % (key, entry.custom[key].text) )
+            self.response.out.write( '<br>')
+          else:
+            self.response.out.write( '%s %s<br>' % (i, entry.title.text) )
+    
     def get(self):
-        print "Print WorkSheet"
+        feed = gd_client.GetSpreadsheetsFeed()
+        input = self.request.get('spreadsheetid')
+        
+        id_parts = feed.entry[string.atoi(input)].id.text.split('/')
+        curr_key = id_parts[len(id_parts) - 1]
+        
+        input = self.request.get('worksheetid')
+        
+        feed = gd_client.GetWorksheetsFeed(curr_key)
+        
+        id_parts = feed.entry[string.atoi(input)].id.text.split('/')
+        curr_wksht_id = id_parts[len(id_parts) - 1]
+        
+        list_feed = gd_client.GetListFeed(curr_key, curr_wksht_id)
+        self._PrintFeed(list_feed)
+        
 
 def main():
     application = webapp.WSGIApplication([
