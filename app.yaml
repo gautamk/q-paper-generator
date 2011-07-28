@@ -4,6 +4,10 @@ runtime: python
 api_version: 1
 
 handlers:
+- url : /(GetSingleUseKey|GetSessionKey|GetSpreadSheetList|GetWorksheetList|PrintWorkSheet|worksheet)
+  script: python/spreadsheet.py
+  login : admin
+  
 - url: /step1
   script: python/docs.py
   login: admin

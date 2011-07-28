@@ -51,6 +51,7 @@ class Fetcher(webapp.RequestHandler):
         # Persist this token in the datastore.
         request_token_key = 'request_token_%s' % current_user.user_id()
         gdata.gauth.ae_save(request_token, request_token_key)
+        self.response.out.write(request_token_key)
 
         # Generate the authorization URL.
         approval_page_url = request_token.generate_authorization_url()
@@ -64,38 +65,42 @@ class RequestTokenCallback(webapp.RequestHandler):
 
     @login_required
     def get(self):
-        """When the user grants access, they are redirected back to this
-        handler where their authorized request token is exchanged for a
-        long-lived access token."""
+        try: 
+            """When the user grants access, they are redirected back to this
+            handler where their authorized request token is exchanged for a
+            long-lived access token."""
 
-        current_user = users.get_current_user()
+            current_user = users.get_current_user()
 
-        # Remember the token that we stashed? Let's get it back from
-        # datastore now and adds information to allow it to become an
-        # access token.
-        request_token_key = 'request_token_%s' % current_user.user_id()
-        request_token = gdata.gauth.ae_load(request_token_key)
-        gdata.gauth.authorize_request_token(request_token, self.request.uri)
+            # Remember the token that we stashed? Let's get it back from
+            # datastore now and adds information to allow it to become an
+            # access token.
+            request_token_key = 'request_token_%s' % current_user.user_id()
+            request_token = gdata.gauth.ae_load(request_token_key)
+            gdata.gauth.authorize_request_token(request_token, self.request.uri)
 
-        # We can now upgrade our authorized token to a long-lived
-        # access token by associating it with gdocs client, and
-        # calling the get_access_token method.
-        gdocs.auth_token = gdocs.get_access_token(request_token)
+            # We can now upgrade our authorized token to a long-lived
+            # access token by associating it with gdocs client, and
+            # calling the get_access_token method.
+            gdocs.auth_token = gdocs.get_access_token(request_token)
 
-        # Note that we want to keep the access token around, as it
-        # will be valid for all API calls in the future until a user
-        # revokes our access. For example, it could be populated later
-        # from reading from the datastore or some other persistence
-        # mechanism.
-        access_token_key = 'access_token_%s' % current_user.user_id()
-        gdata.gauth.ae_save(request_token, access_token_key)
+            # Note that we want to keep the access token around, as it
+            # will be valid for all API calls in the future until a user
+            # revokes our access. For example, it could be populated later
+            # from reading from the datastore or some other persistence
+            # mechanism.
+            access_token_key = 'access_token_%s' % current_user.user_id()
+            gdata.gauth.ae_save(request_token, access_token_key)
 
-        # Finally fetch the document list and print document title in
-        # the response
-        feed = gdocs.GetDocList()
-        for entry in feed.entry:
-            template = '<div>%s</div>'
-            self.response.out.write(template % entry.title.text)
+            # Finally fetch the document list and print document title in
+            # the response
+            feed = gdocs.GetDocList(uri='/feeds/default/private/full/-/spreadsheet')
+            self.response.out.write(feed.entry)
+            #for entry in feed.entry:
+                #template = '<div>%s</div>'
+                #self.response.out.write(template % entry.title.text)
+        except :
+           self.redirect('/step1')
 
 
 def main():
