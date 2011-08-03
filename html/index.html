@@ -6,13 +6,24 @@
     </head>
 	<body>
         <h1 >GAE Q PAPER Generator</h1>
+        <span id="UserPane" style="
+        position:absolute;
+        top:0px;
+        right:0px;
+        "><a href="{{ logout_url }}" ><button>{{ username }}&darr;</button></a></span>
         <div id="Menu">
-            <button id="AddQuestion">Add Question</button>
-            <button id="AddSubject">Add Subject</button>
-            <button id="AddDepartment">Add Department</button>
-            <button id="GenerateQPaper">GenerateQuestionPaper</button>
+            <button id="ButtonAddQuestion" onclick="">Add Question</button>
+            <button id="ButtonAddSubject">Add Subject</button>
+            <button id="ButtonAddDepartment" onclick="$('#FormAddDepartment').dialog('open');">Add Department</button>
+            <button id="ButtonGenerateQPaper">GenerateQuestionPaper</button>
         </div>
-        
+    <div id="FormAddDepartment"  class="AsDialog" title="Add a Department">
+        <iframe src="/AddDepartment" ></iframe>
+    </div>
+    <form id="FormAddSubject" method="post" action="">
+    </form>
+    <form id="FormAddQuestion" method="post" action="">
+    </form>
     <div id="ColorCombo">
         <span style="background-color:#2B3E42">&nbsp;</span>
         
@@ -49,6 +60,8 @@
             width:50%;
             font-size:30px;
             text-align:center;
+            background-color:#F2583E;
+            border-radius:20px;
 
         }
         #Menu
@@ -58,18 +71,40 @@
             border-radius:20px;
             padding:3px;
             
+            
+            
+        }
+        iframe
+        {
+            width:70%;
+            height:70%;
+            border:none;
         }
         #Menu > button
         {
-            font-size:30px;
+            font-size:20px;
+            border-radius:10px;
         }
+        .AsDialog
+        {
+            text-align:center;
+            }
     </style>
     <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" ></script>
 	<script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
 	<script>
     $(document).ready(function()
     {
-        $('#Menu > button').button();
+        $('button').button();
+        $('.AsDialog').dialog(
+        {
+            autoOpen:false,
+            show:'slide',
+            hide:'explode',
+            width:$(window).width() - 100,
+            height:$(window).height() - 100,
+            modal:true,
+        });
     });
     </script>
     </body>

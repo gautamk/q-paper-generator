@@ -1,0 +1,34 @@
+<!DOCTYPE HTML >
+<html>
+    <body>
+        <form method="post" >
+        <label for="NewDepartment">New Department Name:</label><input name="NewDepartment" id="NewDepartment" type="text" />
+        <button type="submit" >Add department </button>
+        <br>
+        <br>
+        <table cellpadding="5" cellspacing="5">
+            <caption>List of Departments</caption>
+            {% if departments %}
+                <tr>
+                    <th>Department Name </th>
+                    <th>Added by </th>
+                    <th>Added on </th>
+                </tr>
+            {% endif %}
+            {% for dept in departments %}
+                <tr>
+                    <th>{{ dept.department }}</th>
+                    <th>{{ dept.added_by }} </th>
+                    <th>{{ dept.add_time.date }} </th>
+                </tr>
+            {% endfor %}
+        </table>
+        </form>
+        <style>
+            body
+            {
+                text-align:center;
+                }
+            </style>
+    </body>
+</html>
