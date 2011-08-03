@@ -17,7 +17,7 @@ handlers:
   login: admin
 
 - url: /.*
-  script: python/main.py
+  script: python/views.py
   login: admin
 
 
