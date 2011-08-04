@@ -54,6 +54,11 @@ class AddSubject(webapp.RequestHandler):
         ).put()
         self.redirect("")
 class AddQuestion(webapp.RequestHandler):
+    def get_step1(self):
+        template_values = {
+                "departments":depts,
+            }
+    
     def get(self):
         if(self.request.get("DeptKey") == ""):
             depts = python.models.departmentdb.all()
