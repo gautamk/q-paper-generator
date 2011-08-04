@@ -53,31 +53,54 @@ class AddSubject(webapp.RequestHandler):
         added_by = users.get_current_user()
         ).put()
         self.redirect("")
+
+
 class AddQuestion(webapp.RequestHandler):
     def get_step1(self):
+        #Get Department
+        depts = python.models.departmentdb.all()
+        for dep in depts:
+            dep.key = dep.key()
         template_values = {
                 "departments":depts,
             }
+        path = os.path.join(os.path.split(     os.path.dirname(__file__) ) [0] , 'html/add_question.html' )
+        self.response.out.write(template.render(path, template_values))
+        
+    def get_step2(self):
+        #Get Subject
+        from google.appengine.ext import db
+        dept = self.request.get("DeptKey")
+        subjects = python.models.subjectdb.all().filter('department = ', db.Key(dept))
+        template_values = {
+            "subjects":subjects,
+        }
+        path = os.path.join(os.path.split(     os.path.dirname(__file__) ) [0] , 'html/add_question.html' )
+        self.response.out.write(template.render(path, template_values))
     
     def get(self):
         if(self.request.get("DeptKey") == ""):
-            depts = python.models.departmentdb.all()
-            template_values = {
-                "departments":depts,
-            }
-            path = os.path.join(os.path.split( 	os.path.dirname(__file__) ) [0] , 'html/add_question.html' )
-            self.response.out.write(template.render(path, template_values))
-            return
+            self.get_step1()
         else:
-            from google.appengine.ext import db
-            dept = self.request.get("DeptKey")
-            #subjects = python.models.subjectdb.all().filter('department=', dept)
-            template_values = {
-                #"subjects":subjects,
-            }
-            path = os.path.join(os.path.split( 	os.path.dirname(__file__) ) [0] , 'html/add_question.html' )
-            self.response.out.write(template.render(path, template_values))
+            self.get_step2()
             
+class QuestionForm(webapp.RequestHandler):
+    def get(self):
+        from google.appengine.ext import db
+        SubKey = self.request.get("SubKey")
+        NumberOfQuestions = self.request.get("NumberOfQuestions")
+        QuestionType = self.request.get("QuestionType")
+        if( (SubKey=="") or (NumberOfQuestions == "") or (QuestionType == "") ):
+            self.response.out.write("parameter Error")
+        else:
+            template_values = {
+            "sub_key":SubKey,
+            "question_type":QuestionType,
+            "count":range(int(NumberOfQuestions)),
+            }
+            path = os.path.join(os.path.split(     os.path.dirname(__file__) ) [0] , 'html/question_form.html' )
+            self.response.out.write(template.render(path, template_values))
+        
 
 def main():
     application = webapp.WSGIApplication([
@@ -85,6 +108,7 @@ def main():
 											('/AddDepartment',AddDepartment),
                                             ('/AddSubject',AddSubject),
                                             ('/AddQuestion',AddQuestion),
+                                            ('/QuestionForm',QuestionForm),
 										],
                                          debug=True)
     util.run_wsgi_app(application)

@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<link rel= "stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/humanity/jquery-ui.css" />
+		<style>
+			.accordion
+			{
+				font-size: small;
+			}
+			.accordion > div
+			{
+				height: 200px;
+			}
+		</style>
+	</head>
+	<body>
+		<center><h1>{{ question_type }} Questions</h1></center>
+		<form method="post">
+			<input type="hidden" name="SubKey" value="{{ sub_key }}" />
+			<input type="hidden" name="QuestionType" value="{{ question_type }}" />
+
+			<div class="accordion">
+				{% for c in count %}
+				<h3><a href="#">Question {{ c }}:</a></h3>
+				<div>
+					<textarea name="question{{ c }}" rows="12" cols="70"></textarea>
+				</div>			
+				{% endfor %}
+			</div>	
+			<button type="submit">Add Questions</button>		
+		</form>
+		<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" ></script>
+		<script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+		<script>
+			$(function() {
+				$( ".accordion" ).accordion({
+					fillSpace:true,	
+					collapsible: true,				
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,6 +1,10 @@
 <!DOCTYPE HTML >
 <html>
+	<head>
+		<link rel= "stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/humanity/jquery-ui.css" />
+	</head>
     <body>
+    	
         {% if departments %}
             <form method="get" >
                 <label>Choose a Department:
@@ -15,21 +19,20 @@
         {% endif %}
         {% if subjects %}
         
-             <form method="post" >
+             <form method="get" action="/QuestionForm">
                 <select name="SubKey" >
                 {% for sub in subjects %}
-                    <option value="{{ sub.key }}">{{ dept.department }}</option>
+                    <option value="{{ sub.key }}">{{ sub.subject }}</option>
                 {% endfor %}
                 </select>
-                <br>
+                
                 <select name="QuestionType">
                     <option value="PartA">Part A</option>
                     <option value="PartB">Part B</option>
                 </select>
-                <br>
-                Question:
-                <textarea name="Question"  cols="40" rows="15" >
-                </textarea>
+                
+                Number of Questions to add :<input type="text" name="NumberOfQuestions" />
+                <button type="submit">ok</button>
             </form>
         
         {% endif %}
@@ -39,5 +42,15 @@
                 text-align:center;
                 }
             </style>
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" ></script>
+		<script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				
+				$('button').button();
+				
+			});			
+		</script>
+		
     </body>
 </html>
