@@ -10,6 +10,7 @@
             <caption>List of Departments</caption>
             {% if departments %}
                 <tr>
+                    
                     <th>Department Name </th>
                     <th>Added by </th>
                     <th>Added on </th>
@@ -17,9 +18,10 @@
             {% endif %}
             {% for dept in departments %}
                 <tr>
-                    <th>{{ dept.department }}</th>
-                    <th>{{ dept.added_by }} </th>
-                    <th>{{ dept.add_time.date }} </th>
+                    
+                    <td>{{ dept.department }}</td>
+                    <td>{{ dept.added_by }} </td>
+                    <td>{{ dept.add_time.date }} </td>
                 </tr>
             {% endfor %}
         </table>

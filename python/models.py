@@ -13,7 +13,7 @@ class subjectdb(db.Model):
 
 class questiondb(db.Model):
     subject = db.ReferenceProperty(subjectdb)
-    department = db.ReferenceProperty(departmentdb)
+    question_type =db.StringProperty(required=True, choices=set(["PartA", "PartB"]))
     question = db.TextProperty(required = True)
     add_time = db.DateTimeProperty(auto_now = True)
     added_by = db.UserProperty(required = True)

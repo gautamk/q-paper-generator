@@ -12,18 +12,20 @@
         right:0px;
         "><a href="{{ logout_url }}" ><button>{{ username }}&darr;</button></a></span>
         <div id="Menu">
-            <button id="ButtonAddQuestion" onclick="">Add Question</button>
-            <button id="ButtonAddSubject">Add Subject</button>
+            <button id="ButtonAddQuestion" onclick="$('#FormAddQuestion').dialog('open');">Add Question</button>
+            <button id="ButtonAddSubject" onclick="$('#FormAddSubject').dialog('open');">Add Subject</button>
             <button id="ButtonAddDepartment" onclick="$('#FormAddDepartment').dialog('open');">Add Department</button>
             <button id="ButtonGenerateQPaper">GenerateQuestionPaper</button>
         </div>
     <div id="FormAddDepartment"  class="AsDialog" title="Add a Department">
         <iframe src="/AddDepartment" ></iframe>
     </div>
-    <form id="FormAddSubject" method="post" action="">
-    </form>
-    <form id="FormAddQuestion" method="post" action="">
-    </form>
+    <div id="FormAddSubject"  class="AsDialog" title="Add a Department" >
+        <iframe src="/AddSubject" ></iframe>
+    </div>
+    <div id="FormAddQuestion"  class="AsDialog" title="Add a Department" >
+        <iframe src="/AddQuestion" ></iframe>
+    </div>
     <div id="ColorCombo">
         <span style="background-color:#2B3E42">&nbsp;</span>
         

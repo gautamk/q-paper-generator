@@ -1,0 +1,43 @@
+<!DOCTYPE HTML >
+<html>
+    <body>
+        {% if departments %}
+            <form method="get" >
+                <label>Choose a Department:
+                    </label>
+                <select name="DeptKey" >
+                {% for dept in departments %}
+                    <option value="{{ dept.key }}">{{ dept.department }}</option>
+                {% endfor %}
+                </select>
+                <button type="submit" >OK</button>
+            </form>
+        {% endif %}
+        {% if subjects %}
+        
+             <form method="post" >
+                <select name="SubKey" >
+                {% for sub in subjects %}
+                    <option value="{{ sub.key }}">{{ dept.department }}</option>
+                {% endfor %}
+                </select>
+                <br>
+                <select name="QuestionType">
+                    <option value="PartA">Part A</option>
+                    <option value="PartB">Part B</option>
+                </select>
+                <br>
+                Question:
+                <textarea name="Question"  cols="40" rows="15" >
+                </textarea>
+            </form>
+        
+        {% endif %}
+        <style>
+            body
+            {
+                text-align:center;
+                }
+            </style>
+    </body>
+</html>

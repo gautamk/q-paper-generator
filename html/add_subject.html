@@ -1,0 +1,44 @@
+<!DOCTYPE HTML >
+<html>
+    <body>
+        <form method="post" >
+        <label>Choose Department:</label> 
+        <select name="Department">
+            {% for dept in departments %}
+            <option value="{{ dept.key }}">{{ dept.department}}</option>
+            {% endfor %}
+        </select>
+        <label for="NewSubject">New Subject Name:</label><input id="NewSubject" name="NewSubject"  type="text" />
+        <button type="submit" >Add Subject </button>
+        <br>
+        <br>
+        <table cellpadding="5" cellspacing="5">
+            <caption>List of subjects</caption>
+            {% if subjects %}
+                <tr>
+                    
+                    <th>Subject Name </th>
+                    <th>Department</th>
+                    <th>Added by </th>
+                    <th>Added on </th>
+                </tr>
+            {% endif %}
+            {% for sub in subjects %}
+                <tr>
+                    
+                    <td>{{ sub.subject }}</td>
+                    <td>{{ sub.department.department }}</td>
+                    <td>{{ sub.added_by }} </td>
+                    <td>{{ sub.add_time.date }} </td>
+                </tr>
+            {% endfor %}
+        </table>
+        </form>
+        <style>
+            body
+            {
+                text-align:center;
+                }
+            </style>
+    </body>
+</html>
