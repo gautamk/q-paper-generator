@@ -15,11 +15,11 @@
 	</head>
 	<body>
 		<center><h1>{{ question_type }} Questions</h1></center>
-		<form method="post">
+		<form method="post" action="/QuestionForm">
 			<input type="hidden" name="SubKey" value="{{ sub_key }}" />
 			<input type="hidden" name="QuestionType" value="{{ question_type }}" />
 
-			<div class="accordion">
+			<div id="accordion">
 				{% for c in count %}
 				<h3><a href="#">Question {{ c }}:</a></h3>
 				<div>
@@ -27,17 +27,37 @@
 				</div>			
 				{% endfor %}
 			</div>	
-			<button type="submit">Add Questions</button>		
+			<button type="button" onclick="addQuestion();">I need to add another Question</button>
+			<button type="submit">Submit Questions to Database</button>
 		</form>
 		<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" ></script>
 		<script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
 		<script>
+			var numberOfQuestions = {{ number_of_questions }};
 			$(function() {
-				$( ".accordion" ).accordion({
+				$('button').button();
+				$( "#accordion" ).accordion({
 					fillSpace:true,	
 					collapsible: true,				
 				});
 			});
+			function addQuestion ()
+			{
+				$( "#accordion" ).append('\
+				<h3><a href="#">Question '+ numberOfQuestions +':</a></h3> \
+				<div> \
+					<textarea name="question'+ numberOfQuestions +'" rows="12" cols="70"></textarea>\
+				</div> \
+				');
+				
+				$( "#accordion" ).accordion('destroy')
+				$( "#accordion" ).accordion({
+					fillSpace:true,	
+					collapsible: true,		
+				});
+				$( "#accordion" ).accordion("activate",numberOfQuestions);
+				numberOfQuestions++;
+			}
 		</script>
 	</body>
 </html>

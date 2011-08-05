@@ -85,18 +85,47 @@ class AddQuestion(webapp.RequestHandler):
             self.get_step2()
             
 class QuestionForm(webapp.RequestHandler):
+    def post (self):
+        import re
+        sub_key = self.request.get("SubKey")
+        q_type = self.request.get("QuestionType")
+        questions_added_counter = 0
+        args=self.request.arguments() # get the names of the arguments
+        
+        for i in range(args.__len__()): # Loop Through each Argument name 
+            if(args[i].count("question")): # check if the argument is a question
+                #Add the question to the database.
+                if(self.request.get(args[i]) != ""):
+                    python.models.questiondb( subject = python.models.subjectdb.get(sub_key) ,
+                                              question_type = q_type,
+                                              question =self.request.get(args[i]) ,
+                                              added_by = users.get_current_user()
+                                              ).put()
+                    questions_added_counter += 1
+        self.response.out.write(str(questions_added_counter)+" Questions Added")
+                                          
+        
+        
     def get(self):
         from google.appengine.ext import db
         SubKey = self.request.get("SubKey")
-        NumberOfQuestions = self.request.get("NumberOfQuestions")
+        
+        try:
+            NumberOfQuestions = int(self.request.get("NumberOfQuestions"))
+        except ValueError:
+            #if a non numeric or empty value is given
+            NumberOfQuestions = 1
+            
         QuestionType = self.request.get("QuestionType")
-        if( (SubKey=="") or (NumberOfQuestions == "") or (QuestionType == "") ):
-            self.response.out.write("parameter Error")
+        
+        if( (SubKey=="")  or (QuestionType == "") ):
+            self.response.out.write("Required parameters missing")
         else:
             template_values = {
             "sub_key":SubKey,
             "question_type":QuestionType,
-            "count":range(int(NumberOfQuestions)),
+            "count":range(NumberOfQuestions),
+            "number_of_questions":NumberOfQuestions,
             }
             path = os.path.join(os.path.split(     os.path.dirname(__file__) ) [0] , 'html/question_form.html' )
             self.response.out.write(template.render(path, template_values))

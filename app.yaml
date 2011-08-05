@@ -4,8 +4,7 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /tinymce
-  static_dir: tinymce
+
   
 - url : /(GetSingleUseKey|GetSessionKey|GetSpreadSheetList|GetWorksheetList|PrintWorkSheet|worksheet)
   script: python/spreadsheet.py
